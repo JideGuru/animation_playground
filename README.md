@@ -1,14 +1,17 @@
-# Animations Playground
-Animations created with SwiftUI.
+# Animations Playground ![GitHub stars](https://img.shields.io/github/stars/JideGuru/animation_playground?style=social)
 
 ![platform](https://img.shields.io/badge/platform-Flutter-blue)
 [![GitHub license](https://img.shields.io/badge/License-Apache2.0-blue.svg)](LICENSE)
 ![Repository size](https://img.shields.io/github/repo-size/JideGuru/animation_playground)
-![GitHub stars](https://img.shields.io/github/stars/JideGuru/animation_playground?style=social)
-![GitHub forks](https://img.shields.io/github/forks/JideGuru/animation_playground?style=social)
 ![GitHub follow](https://img.shields.io/github/followers/JideGuru?style=social)
 
-A new Flutter project.
+This repo contains some animations that i implemented in my free time. You can see the animations on my [Twitter Page](https://twitter.com/iamjideguru) 
+Feel free to star, fork and contribute.
+
+## Animation Demos
+
+#### Fading Grid
+![Fading Grid](gifs/fading-grid.gif)
 
 ## Getting Started
 
