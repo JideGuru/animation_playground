@@ -10,8 +10,11 @@ Feel free to star, fork and contribute.
 
 ## Animation Demos
 
-#### Fading Grid
+#### Fading Grid || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/grid_magnification/fading_grid.dart)
 ![Fading Grid](gifs/fading-grid.gif)
+
+#### Grid Magnification || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/grid_magnification/grid_magnification.dart)
+![Grid Magnification](gifs/grid-magn.gif)
 
 ## Getting Started
 
