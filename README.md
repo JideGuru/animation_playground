@@ -1,4 +1,12 @@
-# animation_playground
+# Animations Playground
+Animations created with SwiftUI.
+
+![platform](https://img.shields.io/badge/platform-Flutter-blue)
+[![GitHub license](https://img.shields.io/badge/License-Apache2.0-blue.svg)](LICENSE)
+![Repository size](https://img.shields.io/github/repo-size/JideGuru/animation_playground)
+![GitHub stars](https://img.shields.io/github/stars/JideGuru/animation_playground?style=social)
+![GitHub forks](https://img.shields.io/github/forks/JideGuru/animation_playground?style=social)
+![GitHub follow](https://img.shields.io/github/followers/JideGuru?style=social)
 
 A new Flutter project.
 

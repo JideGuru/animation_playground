@@ -34,6 +34,7 @@ class _FadingGridState extends State<FadingGrid> {
             setState(() {});
           },
           onPanEnd: (details) {
+            location = Offset.zero;
             setState(() {});
           },
           child: SizedBox(
