@@ -14,7 +14,7 @@ class _GridMagnificationState extends State<GridMagnification> {
 
   @override
   Widget build(BuildContext context) {
-    int squareAmountHorizontal = 11;
+    int squareAmountHorizontal = 12;
     Size screenSize = MediaQuery.of(context).size;
     double squareContainerSize = screenSize.width / squareAmountHorizontal;
     double squarePadding = 10;
@@ -87,9 +87,7 @@ class _GridPainter extends CustomPainter {
     );
     Paint paint = Paint()..color = Colors.white;
     paint.shader = gradient.createShader(canvasRect);
-    // canvas.drawColor(Colors.blue, BlendMode.src);
-    // print(squareSize);
-    const radius = 120;
+    const radius = 110;
     for (int i = 0; i < squareAmountHorizontal; i++) {
       for (int j = 0; j < squareAmountVertical; j++) {
         final rectPos = Offset(
@@ -106,7 +104,7 @@ class _GridPainter extends CustomPainter {
         final root = sqrt((a * a) + (b * b));
         final scale = (root - radius) / radius;
         final modifiedScale = location == Offset.zero ? 1 : (1 - scale);
-        final fadingScale = modifiedScale > 0 ? modifiedScale : 0.001;
+        final fadingScale = modifiedScale > 0 ? modifiedScale : 0;
         final translateX = a * median;
         final translateY = b * median;
         Rect rect = Rect.fromCenter(

@@ -86,8 +86,6 @@ class _GridPainter extends CustomPainter {
       height: size.height / 2,
     );
     Paint paint = Paint()..shader = gradient.createShader(canvasRect);
-    // canvas.drawColor(Colors.blue, BlendMode.src);
-    // print(squareSize);
     for (int i = 0; i < squareAmountHorizontal; i++) {
       for (int j = 0; j < squareAmountVertical; j++) {
         final rectPos = Offset(
@@ -102,7 +100,7 @@ class _GridPainter extends CustomPainter {
         sqrt((size.width * size.width) + (size.height * size.height));
         final scale = root / (diagonalValue / 2);
         final modifiedScale = location == Offset.zero ? 1 : (1 - scale);
-        final fadingScale = modifiedScale > 0 ? modifiedScale : 0.001;
+        final fadingScale = modifiedScale > 0 ? modifiedScale : 0;
         Rect rect = Rect.fromCenter(
           center: rectPos,
           height: fadingScale * squareSize,
