@@ -16,7 +16,7 @@ class ListPage extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           AnimationPage page = animationList[index];
           return ListTile(
-            leading: Icon(Icons.ac_unit_outlined),
+            leading: Icon(page.icon),
             title: Text(page.title),
             onTap: () {
               Navigator.push(

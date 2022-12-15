@@ -21,6 +21,11 @@ Feel free to star, fork and contribute.
 #### Grid Magnification || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/grid_magnification/grid_magnification.dart)
 ![Grid Magnification](gifs/grid-magn.gif)
 
+---
+
+#### 3D Card || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/card/three_dimensional_card.dart)
+![3D Card](gifs/3d-card.gif)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
