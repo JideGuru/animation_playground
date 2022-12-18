@@ -1,5 +1,5 @@
 import 'package:animation_playground/animations/card/three_dimensional_card.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:animation_playground/animations/coding_train_challenges/bouncing_dvd.dart';
 import 'package:flutter/material.dart';
 
 import 'animations/grid_magnification/barrel.dart';
@@ -19,6 +19,11 @@ List animationList = [
     title: '3D Card',
     page: const ThreeDimensionalCard(),
     icon: Icons.threed_rotation,
+  ),
+  AnimationPage(
+    title: 'Bouncing DVD',
+    page: const BouncingDVD(),
+    icon: Icons.disc_full,
   ),
 ];
 

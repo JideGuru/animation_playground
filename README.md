@@ -26,6 +26,11 @@ Feel free to star, fork and contribute.
 #### 3D Card || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/card/three_dimensional_card.dart)
 ![3D Card](gifs/3d-card.gif)
 
+---
+
+#### Bouncing DVD  || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/bouncing_dvd.dart)
+![Bouncing DVD](gifs/bouncing-dvd.gif)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

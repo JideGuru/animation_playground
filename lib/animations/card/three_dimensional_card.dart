@@ -13,7 +13,7 @@ class _ThreeDimensionalCardState extends State<ThreeDimensionalCard> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     const height = 256.0;
-    final width = screenSize.width * 0.9;
+    final width = screenSize.width > 400 ? 400.0 : screenSize.width * 0.9;
 
     const cardHeight = height - 7;
     final cardWidth = width - 7;
