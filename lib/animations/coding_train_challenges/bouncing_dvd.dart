@@ -12,7 +12,7 @@ class BouncingDVD extends StatefulWidget {
 
 class _BouncingDVDState extends State<BouncingDVD> {
   Random random = Random();
-  Color dvdColor = Colors.black;
+  Color dvdColor = Colors.pink;
   double dvdWidth = 150, dvdHeight = 80;
   double x = 90, y = 30, xSpeed = 50, ySpeed = 50, speed = 150;
 
