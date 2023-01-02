@@ -14,8 +14,8 @@ class _FadingGridState extends State<FadingGrid> {
 
   @override
   Widget build(BuildContext context) {
-    int squareAmountHorizontal = 12;
     Size screenSize = MediaQuery.of(context).size;
+    int squareAmountHorizontal = screenSize.width ~/ 32.7;
     double squareContainerSize = screenSize.width / squareAmountHorizontal;
     double squarePadding = 10;
     double squareSize = squareContainerSize - squarePadding;
