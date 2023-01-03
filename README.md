@@ -28,8 +28,19 @@ Feel free to star, fork and contribute.
 
 ---
 
-#### Bouncing DVD  || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/bouncing_dvd.dart)
+#### Bouncing DVD || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/bouncing_dvd.dart)
 ![Bouncing DVD](gifs/bouncing-dvd.gif)
+
+---
+
+#### Rain Animation || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/rain.dart)
+![Rain Animation](gifs/rain.gif)
+
+---
+
+#### Clock Loader || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/loaders/clock_loader.dart)
+![Clock Loader](gifs/clock_loader.gif)
+
 
 ## Getting Started
 

@@ -1,5 +1,7 @@
 import 'package:animation_playground/animations/card/three_dimensional_card.dart';
 import 'package:animation_playground/animations/coding_train_challenges/bouncing_dvd.dart';
+import 'package:animation_playground/animations/coding_train_challenges/rain.dart';
+import 'package:animation_playground/animations/loaders/clock_loader.dart';
 import 'package:flutter/material.dart';
 
 import 'animations/grid_magnification/barrel.dart';
@@ -24,6 +26,16 @@ List animationList = [
     title: 'Bouncing DVD',
     page: const BouncingDVD(),
     icon: Icons.disc_full,
+  ),
+  AnimationPage(
+    title: 'Clock Loader',
+    page: const ClockLoader(),
+    icon: Icons.access_time_rounded,
+  ),
+  AnimationPage(
+    title: 'Rain',
+    page: const RainAnimation(),
+    icon: Icons.thunderstorm_outlined,
   ),
 ];
 

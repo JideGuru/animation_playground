@@ -8,8 +8,35 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Playground'),
+        title: const Text('Animation Playground'),
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showAboutDialog(
+                context: context,
+                children: [
+                  const Text(
+                    'This is a project where i basically dump some animations '
+                        'i work on from time to time. I hope it inspires and '
+                        'help people with Flutter animations.',
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        '- JideGuru 💙',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+            icon: const Icon(Icons.info_outline),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: animationList.length,
