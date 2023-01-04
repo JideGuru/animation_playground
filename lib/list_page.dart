@@ -18,8 +18,8 @@ class ListPage extends StatelessWidget {
                 children: [
                   const Text(
                     'This is a project where i basically dump some animations '
-                        'i work on from time to time. I hope it inspires and '
-                        'help people with Flutter animations.',
+                    'i work on from time to time. I hope it inspires and '
+                    'help people with Flutter animations.',
                   ),
                   const SizedBox(height: 15),
                   Row(
@@ -46,10 +46,7 @@ class ListPage extends StatelessWidget {
             leading: Icon(page.icon),
             title: Text(page.title),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => page.page),
-              );
+              Navigator.pushNamed(context, page.route);
             },
           );
         },
