@@ -9,6 +9,8 @@ This repo contains some animations that i implemented in my free time.
 
 You can see the animations on my [Twitter Page](https://twitter.com/iamjideguru) 
 
+try out the demos here [animation-playground.jideguru.dev](https://animation-playground.jideguru.dev/)
+
 Feel free to star, fork and contribute.
 
 ## Animation Demos
