@@ -41,7 +41,6 @@ class _RainDropState extends State<_RainDrop> with TickerProviderStateMixin {
   late AnimationController animationController;
   late Animation animation;
   late double dx, dy, length, z;
-  bool isVisible = true;
 
   Random random = Random();
 
@@ -53,12 +52,12 @@ class _RainDropState extends State<_RainDrop> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     dx = random.nextDouble() * screenWidth;
-    dy = -500 - (random.nextDouble() * -100);
+    dy = -500 - (random.nextDouble() * -500);
     z = random.nextDouble() * 20;
     length = rangeMap(z, 0, 20, 10, 20);
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: rangeMap(z, 0, 20, 500, 3000).toInt()),
+      duration: Duration(milliseconds: rangeMap(z, 0, 20, 3000, 500).toInt()),
     );
     animation = Tween<double>(begin: dy, end: screenHeight).animate(
       animationController,
@@ -70,18 +69,14 @@ class _RainDropState extends State<_RainDrop> with TickerProviderStateMixin {
 
   animationListener() {
     if (animationController.status == AnimationStatus.completed) {
-      isVisible = false;
-      setState(() {});
       animationController.reset();
       z = random.nextDouble() * 20;
       length = rangeMap(z, 0, 20, 10, 20);
       animationController.duration = Duration(
-        milliseconds: rangeMap(z, 0, 20, 500, 3000).toInt(),
+        milliseconds: rangeMap(z, 0, 20, 3000, 500).toInt(),
       );
       dx = random.nextDouble() * screenWidth;
-      dy = -500 - (random.nextDouble() * -100);
-      setState(() {});
-      isVisible = true;
+      dy = -500 - (random.nextDouble() * -500);
       if (mounted) animationController.forward();
     }
   }
@@ -95,25 +90,22 @@ class _RainDropState extends State<_RainDrop> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: isVisible,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(dx, animation.value),
-            child: Container(
-              height: length,
-              width: 2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-                border: Border.all(width: rangeMap(z, 0, 20, 1, 3)),
-              ),
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(dx, animation.value),
+          child: Container(
+            height: length,
+            width: 2,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+              border: Border.all(width: rangeMap(z, 0, 20, 1, 3)),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

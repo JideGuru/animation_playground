@@ -31,6 +31,21 @@ List animationList = [
     route: '/rain',
     icon: Icons.thunderstorm_outlined,
   ),
+  AnimationPage(
+    title: 'Loader XLVII',
+    route: '/loader-xlvii',
+    icon: Icons.face,
+  ),
+  AnimationPage(
+    title: 'Circle Menu',
+    route: '/circle-menu',
+    icon: Icons.menu_open,
+  ),
+  AnimationPage(
+    title: 'Fireworks',
+    route: '/fireworks',
+    icon: Icons.celebration,
+  ),
 ];
 
 class AnimationPage {
