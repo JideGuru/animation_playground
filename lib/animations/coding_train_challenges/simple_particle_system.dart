@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:animation_playground/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -15,7 +13,6 @@ class _SimpleParticleSystemState extends State<SimpleParticleSystem>
     with SingleTickerProviderStateMixin {
   late List<Particle> particles;
   late List<Particle> particlesToRemove;
-  Random random = Random();
   late final Ticker _ticker;
 
   @override
