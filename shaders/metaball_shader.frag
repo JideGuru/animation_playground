@@ -1,3 +1,5 @@
+/// ref: https://github.com/T99Rots/flutter_metaballs/blob/main/lib/metaballs_shader.glsl
+
 #version 320 es
 
 precision highp float;

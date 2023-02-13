@@ -65,7 +65,7 @@ class ParticlePainter extends CustomPainter {
       particle.setPosition(particle.x * size.width, particle.y * size.height);
       particle.update();
       var paint = Paint()
-        ..color = Colors.white.withOpacity(particle.opacity)
+        ..color = Color.fromARGB(particle.opacity, 255, 255, 255)
         ..strokeWidth = 3.0;
       canvas.drawCircle(Offset(particle.x, particle.y), 13.0, paint);
       if (particle.finished()) particlesToRemove.add(particle);
@@ -81,7 +81,7 @@ class Particle {
   double y = 0.9;
   double vx = doubleInRange(-1, 1);
   double vy = doubleInRange(-5, -1);
-  double opacity = 1;
+  int opacity = 255;
 
   Particle();
 
@@ -95,12 +95,12 @@ class Particle {
   update() {
     x += vx;
     y += vy;
-    if (opacity >= 0.1) {
-      opacity -= 0.015;
+    if (opacity > 0) {
+      opacity -= 3;
     }
   }
 
   bool finished() {
-    return opacity <= 0.1;
+    return opacity <= 0;
   }
 }
