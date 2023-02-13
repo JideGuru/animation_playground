@@ -44,6 +44,24 @@ Feel free to star, fork and contribute.
 ![Clock Loader](gifs/clock_loader.gif)
 
 
+---
+
+#### Fractal Pyramid Shader || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/shaders/fractal_pyramid.dart)
+![Fractal Pyramid Shader](gifs/pyramid-shader.gif)
+
+
+---
+
+#### Metaball FAB || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/shaders/metaball_fab.dart)
+![Metaball FAB](gifs/metaball-fab.gif)
+
+
+---
+
+#### Simple Particle System || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/simple_particle_system.dart)
+![Simple Particle System](gifs/simple-particle-system.gif)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
