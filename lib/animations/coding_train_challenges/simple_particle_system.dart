@@ -40,13 +40,16 @@ class _SimpleParticleSystemState extends State<SimpleParticleSystem>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: size.width,
-      height: size.height,
-      child: CustomPaint(
-        painter: ParticlePainter(
-          particles: particles,
-          particlesToRemove: particlesToRemove,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: CustomPaint(
+          painter: ParticlePainter(
+            particles: particles,
+            particlesToRemove: particlesToRemove,
+          ),
         ),
       ),
     );
