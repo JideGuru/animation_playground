@@ -20,7 +20,7 @@ class _PyramidShaderState extends State<PyramidShader> with SingleTickerProvider
   void initState() {
     super.initState();
     _ticker = createTicker((elapsed) {
-      time += 0.05;
+      time += 0.015;
       setState(() {});
     });
     _ticker.start();
