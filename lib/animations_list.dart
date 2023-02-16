@@ -19,7 +19,7 @@ List animationList = [
   AnimationPage(
     title: 'Bouncing DVD',
     route: '/bouncing-dvd',
-    icon: Icons.disc_full,
+    icon: Icons.animation,
   ),
   AnimationPage(
     title: 'Clock Loader',
@@ -32,19 +32,19 @@ List animationList = [
     icon: Icons.thunderstorm_outlined,
   ),
   AnimationPage(
-    title: 'Loader XLVII',
-    route: '/loader-xlvii',
-    icon: Icons.face,
+    title: 'Fractal Pyramid Shader',
+    route: '/pyramid-shader',
+    icon: Icons.animation,
   ),
   AnimationPage(
-    title: 'Circle Menu',
-    route: '/circle-menu',
-    icon: Icons.menu_open,
+    title: 'Metaball FAB',
+    route: '/metaball-fab',
+    icon: Icons.animation,
   ),
   AnimationPage(
-    title: 'Fireworks',
-    route: '/fireworks',
-    icon: Icons.celebration,
+    title: 'Simple Particle System',
+    route: '/simple-particle-system',
+    icon: Icons.animation,
   ),
 ];
 

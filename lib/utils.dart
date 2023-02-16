@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -34,3 +35,8 @@ double rangeMap(
     double x, double inMin, double inMax, double outMin, double outMax) {
   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
+
+Random _random = Random();
+
+double doubleInRange(num start, num end) =>
+    _random.nextDouble() * (end - start) + start;
