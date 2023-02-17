@@ -1,4 +1,5 @@
-// https://www.shadertoy.com/view/tsXBzS
+// This shader was taken from ShaderToy
+// Origin of Shader: https://www.shadertoy.com/view/tsXBzS
 #version 320 es
 
 precision highp float;

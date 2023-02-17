@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
+// This shader was taken from ShaderToy
+// Origin of Shader: https://www.shadertoy.com/view/tsXBzS
 class PyramidShader extends StatefulWidget {
   const PyramidShader({Key? key}) : super(key: key);
 
