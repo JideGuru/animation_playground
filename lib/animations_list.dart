@@ -46,6 +46,11 @@ List animationList = [
     route: '/simple-particle-system',
     icon: Icons.animation,
   ),
+  AnimationPage(
+    title: 'The Bouncing Ball',
+    route: '/bouncing-ball',
+    icon: Icons.sports_baseball,
+  ),
 ];
 
 class AnimationPage {

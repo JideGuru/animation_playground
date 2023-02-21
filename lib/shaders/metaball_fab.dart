@@ -28,7 +28,6 @@ class _MetaballFABState extends State<MetaballFAB>
         (ui.window.physicalSize.shortestSide / ui.window.devicePixelRatio);
     var screenHeight =
         (ui.window.physicalSize.longestSide / ui.window.devicePixelRatio);
-    print(screenHeight);
     mainButtonPos = Offset(screenWidth / 2, screenHeight - 100);
     firstButtonPos = Offset(screenWidth / 2, screenHeight - 100);
     secondButtonPos = Offset(screenWidth / 2, screenHeight - 100);
@@ -105,7 +104,6 @@ class _MetaballFABState extends State<MetaballFAB>
           return AnimatedSampler(
             child: child!,
             (ui.Image image, Size size, Canvas canvas) {
-              print(_firstAnimation.value);
               shader
                 ..setFloat(0, mainButtonPos.dx)
                 ..setFloat(1, mainButtonPos.dy)
