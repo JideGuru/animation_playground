@@ -44,12 +44,17 @@ List animationList = [
   AnimationPage(
     title: 'Simple Particle System',
     route: '/simple-particle-system',
-    icon: Icons.animation,
+    icon: Icons.snowing,
   ),
   AnimationPage(
     title: 'The Bouncing Ball',
     route: '/bouncing-ball',
     icon: Icons.sports_baseball,
+  ),
+  AnimationPage(
+    title: 'Particle System with emitters',
+    route: '/particle-system-with-emitters',
+    icon: Icons.snowing,
   ),
 ];
 

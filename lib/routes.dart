@@ -1,4 +1,3 @@
-import 'package:animation_playground/animations/coding_train_challenges/bouncing_ball.dart';
 import 'package:animation_playground/list_page.dart';
 import 'package:animation_playground/shaders/barrel.dart';
 import 'package:flutter/material.dart';
@@ -20,4 +19,6 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/metaball-fab': (context) => const MetaballFAB(),
   '/simple-particle-system': (context) => const SimpleParticleSystem(),
   '/bouncing-ball': (context) => const BouncingBall(),
+  '/particle-system-with-emitters': (context) =>
+      const ParticleSystemWithEmitters(),
 };
