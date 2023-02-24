@@ -30,10 +30,13 @@ class _ParticleSystemWithEmittersState extends State<ParticleSystemWithEmitters>
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Tap on the screen to display Particles'),
+      ),
       body: GestureDetector(
         onTapDown: (details) {
           if (emitters.length < 38) {
-            emitters.add(Emitter(position: details.globalPosition));
+            emitters.add(Emitter(position: details.localPosition));
           }
         },
         child: SizedBox(
@@ -111,12 +114,12 @@ class Emitter {
 
   Emitter({required this.position})
       : particles = List.generate(
-    1,
-        (index) => Particle(
-      x: position.dx,
-      y: position.dy,
-    ),
-  );
+          1,
+          (index) => Particle(
+            x: position.dx,
+            y: position.dy,
+          ),
+        );
 
   update() {
     particles.add(Particle(x: position.dx, y: position.dy));
