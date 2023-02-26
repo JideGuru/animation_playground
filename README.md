@@ -5,11 +5,11 @@
 ![Repository size](https://img.shields.io/github/repo-size/JideGuru/animation_playground)
 ![GitHub follow](https://img.shields.io/github/followers/JideGuru?style=social)
 
-This repo contains some animations that i implemented in my free time. 
+This repo contains some animations that i implemented using Flutter in my free time. 
 
-You can see the animations on my [Twitter Page](https://twitter.com/iamjideguru) 
+You can see the animations on my [Twitter Profile](https://twitter.com/iamjideguru) 
 
-try out the demos here [animation-playground.jideguru.dev](https://animation-playground.jideguru.dev/)
+Try out the demos here [animation-playground.jideguru.dev](https://animation-playground.jideguru.dev/)
 
 Feel free to star, fork and contribute.
 
