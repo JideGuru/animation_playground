@@ -62,6 +62,18 @@ Feel free to star, fork and contribute.
 ![Simple Particle System](gifs/simple-particle-system.gif)
 
 
+---
+
+#### The Bouncing Ball || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/bouncing_ball.dart)
+![The Bouncing Ball](gifs/bouncing-ball.gif)
+
+
+---
+
+#### Particle System with Emitters || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/particle_system_with_emitters.dart)
+![Particle System with Emitters](gifs/particle-emitter.gif)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
