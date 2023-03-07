@@ -56,6 +56,11 @@ List animationList = [
     route: '/particle-system-with-emitters',
     icon: Icons.snowing,
   ),
+  AnimationPage(
+    title: 'Painting with Pixels',
+    route: '/painting-with-pixels',
+    icon: Icons.format_paint,
+  ),
 ];
 
 class AnimationPage {

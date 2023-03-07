@@ -21,4 +21,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/bouncing-ball': (context) => const BouncingBall(),
   '/particle-system-with-emitters': (context) =>
       const ParticleSystemWithEmitters(),
+  '/painting-with-pixels': (context) => const PaintingWithPixels(),
 };

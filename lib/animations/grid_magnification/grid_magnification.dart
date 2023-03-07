@@ -23,6 +23,9 @@ class _GridMagnificationState extends State<GridMagnification> {
         (screenSize.height / squareContainerSize).floor() - 3;
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Grid Magnification'),
+      ),
       body: Center(
         child: GestureDetector(
           onPanDown: (details) {

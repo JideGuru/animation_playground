@@ -68,6 +68,9 @@ class _BouncingDVDState extends State<BouncingDVD> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Bouncing DVD'),
+      ),
       body: Stack(
         children: [
           AnimatedPositioned(

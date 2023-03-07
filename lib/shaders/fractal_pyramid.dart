@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
+import 'dart:js' as js;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
@@ -13,7 +15,8 @@ class PyramidShader extends StatefulWidget {
   State<PyramidShader> createState() => _PyramidShaderState();
 }
 
-class _PyramidShaderState extends State<PyramidShader> with SingleTickerProviderStateMixin {
+class _PyramidShaderState extends State<PyramidShader>
+    with SingleTickerProviderStateMixin {
   double time = 0;
 
   late final Ticker _ticker;
@@ -38,6 +41,22 @@ class _PyramidShaderState extends State<PyramidShader> with SingleTickerProvider
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fractal Pyramid Shader'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (kIsWeb) {
+                js.context.callMethod(
+                  'open',
+                  ['https://www.shadertoy.com/view/tsXBzS'],
+                );
+              }
+            },
+            child: const Text('Check on ShaderToy'),
+          )
+        ],
+      ),
       backgroundColor: Colors.black,
       body: ShaderBuilder(
         assetKey: 'shaders/pyramid.glsl',

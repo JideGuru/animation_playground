@@ -18,6 +18,9 @@ class _ThreeDimensionalCardState extends State<ThreeDimensionalCard> {
     const cardHeight = height - 7;
     final cardWidth = width - 7;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('3D Card'),
+      ),
       backgroundColor: Colors.black,
       body: Center(
         child: Stack(
