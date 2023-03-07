@@ -63,6 +63,9 @@ class _MetaballFABState extends State<MetaballFAB>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Metaball FAB'),
+      ),
       backgroundColor: Colors.black,
       body: ShaderBuilder(
         assetKey: 'shaders/metaball_shader.frag',

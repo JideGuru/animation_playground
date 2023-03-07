@@ -12,9 +12,12 @@ class RainAnimation extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Rain Simulation'),
+      ),
       body: Stack(
         children: [
-          for (int index = 0; index < 200; index++)
+          for (int index = 0; index < 300; index++)
             _RainDrop(
               screenHeight: screenSize.height,
               screenWidth: screenSize.width,

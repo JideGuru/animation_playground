@@ -23,6 +23,9 @@ class _FadingGridState extends State<FadingGrid> {
         (screenSize.height / squareContainerSize).floor() - 3;
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Fading Grid'),
+      ),
       body: Center(
         child: GestureDetector(
           onPanDown: (details) {

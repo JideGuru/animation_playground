@@ -74,6 +74,12 @@ Feel free to star, fork and contribute.
 ![Particle System with Emitters](gifs/particle-emitter.gif)
 
 
+---
+
+#### Painting with Pixels || [Link to code](https://github.com/JideGuru/animation_playground/blob/master/lib/animations/coding_train_challenges/painting_with_pixels.dart)
+![Painting with Pixels](gifs/pixel-painting.gif)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

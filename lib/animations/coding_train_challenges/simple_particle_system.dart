@@ -41,6 +41,9 @@ class _SimpleParticleSystemState extends State<SimpleParticleSystem>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Simple Particle System'),
+      ),
       backgroundColor: Colors.black,
       body: SizedBox(
         width: size.width,

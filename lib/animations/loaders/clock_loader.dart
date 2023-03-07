@@ -48,6 +48,9 @@ class _ClockLoaderState extends State<ClockLoader>
     final screenSize = MediaQuery.of(context).size;
     const offsetAngle = (2 * math.pi) / tickLength;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Clock Loader'),
+      ),
       body: Center(
         child: Stack(
           children: [

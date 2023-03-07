@@ -26,6 +26,12 @@ class _ParticleSystemWithEmittersState extends State<ParticleSystemWithEmitters>
   }
 
   @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
