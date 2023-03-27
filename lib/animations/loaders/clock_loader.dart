@@ -45,7 +45,6 @@ class _ClockLoaderState extends State<ClockLoader>
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     const offsetAngle = (2 * math.pi) / tickLength;
     return Scaffold(
       appBar: AppBar(

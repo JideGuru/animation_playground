@@ -1,7 +1,5 @@
 import 'dart:ui' as ui;
-import 'dart:js' as js;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
@@ -43,19 +41,6 @@ class _PyramidShaderState extends State<PyramidShader>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fractal Pyramid Shader'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              if (kIsWeb) {
-                js.context.callMethod(
-                  'open',
-                  ['https://www.shadertoy.com/view/tsXBzS'],
-                );
-              }
-            },
-            child: const Text('Check on ShaderToy'),
-          )
-        ],
       ),
       backgroundColor: Colors.black,
       body: ShaderBuilder(

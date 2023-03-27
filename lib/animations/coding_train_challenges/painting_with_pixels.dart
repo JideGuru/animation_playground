@@ -19,7 +19,7 @@ class _PaintingWithPixelsState extends State<PaintingWithPixels>
   late img.Image imagePixels;
   bool _loading = true;
   List<Offset> offsets = List.empty(growable: true);
-  math.Random _random = math.Random();
+  final math.Random _random = math.Random();
   late final Ticker _ticker;
 
   @override

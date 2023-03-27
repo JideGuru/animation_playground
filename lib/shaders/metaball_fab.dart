@@ -61,7 +61,6 @@ class _MetaballFABState extends State<MetaballFAB>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Metaball FAB'),
