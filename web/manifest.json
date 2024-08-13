@@ -1,11 +1,11 @@
 {
-    "name": "Animation Playground",
+    "name": "animation_playground",
     "short_name": "animation_playground",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "This repo contains some animations that i implemented in my free time. - JideGuru",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

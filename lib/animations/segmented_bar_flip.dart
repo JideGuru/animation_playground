@@ -69,7 +69,7 @@ class _SegmentedBarFlipState extends State<SegmentedBarFlip> {
   Widget _buildGridView() {
     return GridView.builder(
       padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
@@ -93,7 +93,7 @@ class _SegmentedBarFlipState extends State<SegmentedBarFlip> {
   Widget _buildListView() {
     return ListView.separated(
       padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemCount: 5,
       itemBuilder: (context, index) {
         return Row(
