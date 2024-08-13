@@ -22,9 +22,9 @@ class ListPage extends StatelessWidget {
                     'help people with Flutter animations.',
                   ),
                   const SizedBox(height: 15),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
+                    children: [
                       Text(
                         '- JideGuru 💙',
                         style: TextStyle(fontWeight: FontWeight.bold),

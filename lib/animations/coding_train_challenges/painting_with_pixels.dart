@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:flutter/scheduler.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart' hide Image;
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:image/image.dart' as img;
 
 class PaintingWithPixels extends StatefulWidget {
   const PaintingWithPixels({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _PaintingWithPixelsState extends State<PaintingWithPixels>
       body: _loading
           ? const SizedBox.shrink()
           : Center(
-            child: CustomPaint(
+              child: CustomPaint(
                 painter: _PixelPainter(
                   image: image,
                   imagePixels: imagePixels,
@@ -83,7 +83,7 @@ class _PaintingWithPixelsState extends State<PaintingWithPixels>
                 ),
                 child: SizedBox(height: size.height, width: size.width),
               ),
-          ),
+            ),
     );
   }
 }
@@ -101,19 +101,6 @@ class _PixelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // canvas.drawImage(image, Offset.zero, Paint());
-    // for (int x = 0; x < imagePixels.width; x++) {
-    //   for (int y = 0; y < imagePixels.height; y++) {
-    //     img.Pixel pixel = imagePixels.getPixelSafe(x, y);
-    //     List colorList = pixel.toList();
-    //     canvas.drawCircle(
-    //       Offset(x.toDouble(), y.toDouble()),
-    //       3,
-    //       Paint()..color = Color.fromARGB(255, colorList[0], colorList[1], colorList[2]),
-    //     );
-    //   }
-    // }
-
     for (Offset offset in offsets) {
       img.Pixel pixel =
           imagePixels.getPixelSafe(offset.dx.toInt(), offset.dy.toInt());

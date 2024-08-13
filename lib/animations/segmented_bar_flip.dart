@@ -185,7 +185,7 @@ class Segment extends StatefulWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final bool isLeftSegment;
-  final bool isInitiallyFilled; // New property to handle initial fill
+  final bool isInitiallyFilled;
 
   const Segment({
     required this.text,
@@ -216,7 +216,7 @@ class _SegmentState extends State<Segment> with SingleTickerProviderStateMixin {
     );
 
     if (widget.isSelected) {
-      _controller.value = 0; // Ensure the selected tab is fully visible on load
+      _controller.value = 0;
     }
   }
 
