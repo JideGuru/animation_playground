@@ -61,6 +61,11 @@ List animationList = [
     route: '/painting-with-pixels',
     icon: Icons.format_paint,
   ),
+  AnimationPage(
+    title: 'Segmented bar Flip animation',
+    route: '/segmented-bar-flip-animation',
+    icon: Icons.tab,
+  ),
 ];
 
 class AnimationPage {

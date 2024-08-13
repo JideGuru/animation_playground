@@ -1,3 +1,4 @@
+import 'package:animation_playground/animations/segmented_bar_flip.dart';
 import 'package:animation_playground/list_page.dart';
 import 'package:animation_playground/shaders/barrel.dart';
 import 'package:flutter/material.dart';
@@ -22,4 +23,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/particle-system-with-emitters': (context) =>
       const ParticleSystemWithEmitters(),
   '/painting-with-pixels': (context) => const PaintingWithPixels(),
+  '/segmented-bar-flip-animation': (context) => const SegmentedBarFlip(),
 };
