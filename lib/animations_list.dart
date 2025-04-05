@@ -66,6 +66,11 @@ List animationList = [
     route: '/segmented-bar-flip-animation',
     icon: Icons.tab,
   ),
+  AnimationPage(
+    title: 'MorphingSegmentedControl',
+    route: '/morphing-segmented-control',
+    icon: Icons.animation,
+  ),
 ];
 
 class AnimationPage {

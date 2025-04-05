@@ -7,6 +7,7 @@ import 'animations/card/barrel.dart';
 import 'animations/coding_train_challenges/barrel.dart';
 import 'animations/grid_magnification/barrel.dart';
 import 'animations/loaders/barrel.dart';
+import 'animations/morphing_segmented_bar.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
   '/': (context) => const ListPage(),
@@ -24,4 +25,6 @@ Map<String, Widget Function(BuildContext)> routes = {
       const ParticleSystemWithEmitters(),
   '/painting-with-pixels': (context) => const PaintingWithPixels(),
   '/segmented-bar-flip-animation': (context) => const SegmentedBarFlip(),
+  '/morphing-segmented-control': (context) =>
+      const MorphingSegmentedControlPage(),
 };
