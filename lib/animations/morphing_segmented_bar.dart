@@ -57,13 +57,14 @@ class _MorphingSegmentedControlPageState
                   groupTabCollapsedLabel: "Premium",
                   groupTabOptions: const [
                     MorphingTabItem(
-                        value: PlanType.premiumMonthly, label: "Monthly"),
+                      value: PlanType.premiumMonthly,
+                      label: "Monthly",
+                    ),
                     MorphingTabItem(
-                        value: PlanType.premiumYearly, label: "Annual"),
+                      value: PlanType.premiumYearly,
+                      label: "Annual",
+                    ),
                   ],
-                  // --- Optional Customization ---
-                  // height: 50,
-                  // width: 350,
                   backgroundColor: Colors.white,
                   selectedColor: Colors.black,
                   nestedSelectedColor: Colors.white,
@@ -170,7 +171,7 @@ class MorphingSegmentedControl<T> extends StatefulWidget {
     this.mainAnimationDuration = const Duration(milliseconds: 250),
     this.nestedAnimationDuration = const Duration(milliseconds: 250),
     this.switchAnimationDuration =
-        const Duration(milliseconds: 400), // Using 400ms
+        const Duration(milliseconds: 500), // Increased default
     this.animationCurve = Curves.easeInOut,
     this.switchScaleInCurve = Curves.easeOutCubic,
     this.switchScaleOutCurve = Curves.easeInCubic,
@@ -190,9 +191,9 @@ class MorphingSegmentedControl<T> extends StatefulWidget {
 class _MorphingSegmentedControlState<T>
     extends State<MorphingSegmentedControl<T>> with TickerProviderStateMixin {
   late AnimationController _switchController;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late Animation<Offset> _slideAnimation;
+
+  // Note: Tween animations _could_ be defined here, but defining the logic
+  // directly in the builder based on controller.value is often simpler for reversing.
 
   // Track previous state to trigger animation correctly
   bool _wasGroupTabSelected = false;
@@ -213,26 +214,7 @@ class _MorphingSegmentedControlState<T>
       value: _wasGroupTabSelected ? 1.0 : 0.0,
     );
 
-    _setupAnimations();
-  }
-
-  // Helper to set up tween animations based on controller
-  void _setupAnimations() {
-    // Fade: 0->1 for expanding (nested comes in), 1->0 for collapsing (collapsed comes in)
-    // Opacity logic driven inside builder based on controller value directly for simplicity
-    // This simplifies reversing, but we can use Tweens if preferred.
-
-    // Scale: 0.8->1.0 for expanding (nested scales in), 1.0->0.8 for collapsing (nested scales out)
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-        CurvedAnimation(
-            parent: _switchController, curve: Curves.easeInOut) // Example curve
-        );
-
-    // Slide: Only for collapsed view when it's moving OUT (controller 0 -> 1)
-    _slideAnimation = Tween<Offset>(
-            begin: Offset.zero, end: const Offset(0.0, -0.5)) // Slide up more
-        .animate(CurvedAnimation(
-            parent: _switchController, curve: widget.switchSlideOutCurve));
+    // We don't need _setupAnimations if we calculate directly in the builder
   }
 
   @override
@@ -257,7 +239,6 @@ class _MorphingSegmentedControlState<T>
     if (widget.switchAnimationDuration != oldWidget.switchAnimationDuration) {
       _switchController.duration = widget.switchAnimationDuration;
     }
-    // Note: If curves change, re-setup animations if using CurvedAnimation wrappers outside builder
   }
 
   @override
@@ -378,63 +359,66 @@ class _MorphingSegmentedControlState<T>
                         animation: _switchController,
                         builder: (context, _) {
                           // Calculate animation values based on controller
-                          // Use curves directly here for more control per property
                           final double controllerValue = _switchController
                               .value; // 0.0 = collapsed, 1.0 = expanded
 
                           // --- Collapsed View Animations ---
-                          // Fade out as controller goes 0 -> 1
-                          final double collapsedOpacity = 1.0 -
-                              CurvedAnimation(
-                                      parent: _switchController,
-                                      curve: widget.switchFadeOutCurve)
-                                  .value;
-                          // Scale down as controller goes 0 -> 1
+                          final double collapsedOpacityValue = CurvedAnimation(
+                                  parent: _switchController,
+                                  curve: widget.switchFadeOutCurve)
+                              .value;
+                          final double collapsedOpacity =
+                              (1.0 - collapsedOpacityValue)
+                                  .clamp(0.0, 1.0); // Fade out 1 -> 0
+
+                          final double collapsedScaleValue = CurvedAnimation(
+                                  parent: _switchController,
+                                  curve: widget.switchScaleOutCurve)
+                              .value;
                           final double collapsedScale = 1.0 -
-                              (CurvedAnimation(
-                                          parent: _switchController,
-                                          curve: widget.switchScaleOutCurve)
-                                      .value *
-                                  0.2); // Scale 1.0 -> 0.8
-                          // Slide up as controller goes 0 -> 1
+                              (collapsedScaleValue * 0.4); // Scale 1.0 -> 0.6
+
+                          final double collapsedSlideValue = CurvedAnimation(
+                                  parent: _switchController,
+                                  curve: widget.switchSlideOutCurve)
+                              .value;
                           final Offset collapsedSlide = Tween<Offset>(
                                   begin: Offset.zero,
                                   end: const Offset(0.0, -0.5))
-                              .transform(CurvedAnimation(
-                                      parent: _switchController,
-                                      curve: widget.switchSlideOutCurve)
-                                  .value);
+                              .transform(collapsedSlideValue);
 
                           // --- Expanded View Animations ---
-                          // Fade in as controller goes 0 -> 1
-                          final double expandedOpacity = CurvedAnimation(
+                          final double expandedOpacityValue = CurvedAnimation(
                                   parent: _switchController,
                                   curve: widget.switchFadeInCurve)
                               .value;
-                          // Scale up as controller goes 0 -> 1
-                          final double expandedScale = 0.8 +
-                              (CurvedAnimation(
-                                          parent: _switchController,
-                                          curve: widget.switchScaleInCurve)
-                                      .value *
-                                  0.2); // Scale 0.8 -> 1.0
+                          final double expandedOpacity = expandedOpacityValue
+                              .clamp(0.0, 1.0); // Fade in 0 -> 1
 
-                          // Use IgnorePointer to disable taps on views that are mostly faded out
+                          final double expandedScaleValue = CurvedAnimation(
+                                  parent: _switchController,
+                                  curve: widget.switchScaleInCurve)
+                              .value;
+                          final double expandedScale = 0.6 +
+                              (expandedScaleValue * 0.4); // Scale 0.6 -> 1.0
+
+                          // Use IgnorePointer to disable taps on views that are mostly faded out/in
                           return Stack(
                             alignment: Alignment.center,
                             children: [
                               // --- Collapsed View (Premium + Subtitle) ---
-                              if (controllerValue <
-                                  1.0) // Optimization: Don't build if fully expanded
+                              // Render if not fully expanded
+                              if (controllerValue < 1.0)
                                 IgnorePointer(
-                                  ignoring: controllerValue >
-                                      0.8, // Disable taps when mostly faded
+                                  // Disable taps when mostly faded out (e.g., opacity < 0.15)
+                                  ignoring: collapsedOpacity < 0.15,
                                   child: Opacity(
                                     opacity: collapsedOpacity,
                                     child: Transform.translate(
                                       offset: collapsedSlide,
                                       child: Transform.scale(
-                                        scale: collapsedScale,
+                                        scale:
+                                            collapsedScale, // Use updated scale
                                         child: GestureDetector(
                                           // Keep GestureDetector for tap target
                                           behavior: HitTestBehavior.opaque,
@@ -448,7 +432,6 @@ class _MorphingSegmentedControlState<T>
                                             }
                                           },
                                           child: Container(
-                                            // Background needed? Probably not if main thumb handles it
                                             alignment: Alignment.center,
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 4.0),
@@ -481,38 +464,10 @@ class _MorphingSegmentedControlState<T>
                                                     Flexible(
                                                         child: Text(
                                                             subtitleText1,
-                                                            style: effectiveTextStyle
-                                                                .copyWith(
-                                                                    color: groupCollapsedTextColor
-                                                                        .withValues(
-                                                                      alpha:
-                                                                          0.6,
-                                                                    ),
-                                                                    height: 1.0,
-                                                                    fontSize: math.max(
-                                                                        10.0,
-                                                                        (effectiveTextStyle.fontSize ??
-                                                                                14.0) *
-                                                                            0.7),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis)),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 2.0),
-                                                      child: Text(
-                                                        ' - ',
-                                                        style: effectiveTextStyle
-                                                            .copyWith(
+                                                            style: effectiveTextStyle.copyWith(
                                                                 color: groupCollapsedTextColor
-                                                                    .withValues(
-                                                                  alpha: 0.6,
-                                                                ),
+                                                                    .withOpacity(
+                                                                        0.6),
                                                                 height: 1.0,
                                                                 fontSize: math.max(
                                                                     10.0,
@@ -522,29 +477,48 @@ class _MorphingSegmentedControlState<T>
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w400),
-                                                      ),
-                                                    ),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis)),
+                                                    Padding(
+                                                        padding: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 2.0),
+                                                        child: Text(',',
+                                                            style: effectiveTextStyle.copyWith(
+                                                                color: groupCollapsedTextColor
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                                height: 1.0,
+                                                                fontSize: math.max(
+                                                                    10.0,
+                                                                    (effectiveTextStyle.fontSize ??
+                                                                            14.0) *
+                                                                        0.7),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400))),
                                                     Flexible(
-                                                      child: Text(subtitleText2,
-                                                          style: effectiveTextStyle
-                                                              .copyWith(
-                                                                  color: groupCollapsedTextColor
-                                                                      .withValues(
-                                                                    alpha: 0.6,
-                                                                  ),
-                                                                  height: 1.0,
-                                                                  fontSize: math.max(
-                                                                      10.0,
-                                                                      (effectiveTextStyle.fontSize ??
-                                                                              14.0) *
-                                                                          0.7),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis),
-                                                    ),
+                                                        child: Text(
+                                                            subtitleText2,
+                                                            style: effectiveTextStyle.copyWith(
+                                                                color: groupCollapsedTextColor
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                                height: 1.0,
+                                                                fontSize: math.max(
+                                                                    10.0,
+                                                                    (effectiveTextStyle.fontSize ??
+                                                                            14.0) *
+                                                                        0.7),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis)),
                                                   ],
                                                 ),
                                               ],
@@ -557,19 +531,19 @@ class _MorphingSegmentedControlState<T>
                                 ),
 
                               // --- Expanded View (_NestedTabBar) ---
-                              if (controllerValue >
-                                  0.0) // Optimization: Don't build if fully collapsed
+                              // Render if not fully collapsed
+                              if (controllerValue > 0.0)
                                 IgnorePointer(
-                                  ignoring: controllerValue <
-                                      0.2, // Disable taps when mostly faded out
+                                  // Disable taps when mostly faded out (e.g., opacity < 0.15)
+                                  ignoring: expandedOpacity < 0.15,
                                   child: Opacity(
                                     opacity: expandedOpacity,
                                     child: Transform.scale(
-                                      scale: expandedScale,
+                                      scale: expandedScale, // Use updated scale
                                       alignment: const Alignment(
                                           0.0, 0.3), // Align lower
                                       child: _NestedTabBar<T>(
-                                        // key is not strictly needed here as it's always the same instance type
+                                        // key is not strictly needed here
                                         selectedTabValue: widget.value,
                                         options: widget.groupTabOptions,
                                         onChanged: widget.onChanged,
@@ -608,7 +582,7 @@ class _MorphingSegmentedControlState<T>
 }
 
 // --- _NestedTabBar Class ---
-// (Keep the _NestedTabBar class from the previous valid answer - no changes needed)
+// (This class remains unchanged from the previous version)
 class _NestedTabBar<T> extends StatelessWidget {
   final T selectedTabValue;
   final List<MorphingTabItem<T>> options;
