@@ -363,6 +363,7 @@ class _MorphingSegmentedControlState<T>
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
+                                        key: Key('label_2'),
                                         widget.groupTabCollapsedLabel,
                                         style: effectiveTextStyle.copyWith(
                                           color: groupCollapsedTextColor,
@@ -370,20 +371,46 @@ class _MorphingSegmentedControlState<T>
                                         ),
                                       ),
                                       const SizedBox(height: 2),
-                                      Text(
-                                        widget.groupTabOptions
-                                            .map((option) => option.label)
-                                            .join(', '),
-                                        style: effectiveTextStyle.copyWith(
-                                          color: groupCollapsedTextColor
-                                              .withValues(
-                                            alpha: 0.5,
+                                      Row(
+                                        key: Key('label_2_subtitle_row'),
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            key: const Key(
+                                                'label_2_subtitle_text_0'),
+                                            widget.groupTabOptions.first.label,
+                                            style: effectiveTextStyle.copyWith(
+                                              color: groupCollapsedTextColor
+                                                  .withValues(
+                                                alpha: 0.5,
+                                              ),
+                                              height: 1.0,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                          height: 1.0,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      )
+                                          const Text(
+                                            key: Key(
+                                                'label_2_subtitle_text_1_separator'),
+                                            ' , ',
+                                          ),
+                                          Text(
+                                            key: const Key(
+                                                'label_2_subtitle_text_1'),
+                                            widget.groupTabOptions.last.label,
+                                            style: effectiveTextStyle.copyWith(
+                                              color: groupCollapsedTextColor
+                                                  .withValues(
+                                                alpha: 0.5,
+                                              ),
+                                              height: 1.0,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
