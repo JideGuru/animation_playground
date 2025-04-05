@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:animation_playground/buildcontext_extension.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +45,7 @@ class _MorphingSegmentedControlPageState
                 ),
                 child: MorphingSegmentedControl<PlanType>(
                   width: context.isMobile ? context.screenWidth - 20 : 420,
+                  height: 50,
                   value: _selectedPlan,
                   onChanged: (newValue) {
                     setState(() {
@@ -79,7 +82,8 @@ class _MorphingSegmentedControlPageState
   }
 }
 
-/// Represents an item within the segmented control, particularly for the nested group.
+// --- MorphingTabItem Class ---
+// (Ensure this class definition is included)
 class MorphingTabItem<T> {
   final T value;
   final String label;
@@ -97,6 +101,7 @@ class MorphingTabItem<T> {
   int get hashCode => value.hashCode;
 }
 
+// --- MorphingSegmentedControl Widget ---
 /// A segmented control with a morphing behavior for the second segment,
 /// allowing it to expand into sub-options.
 ///
@@ -109,70 +114,37 @@ class MorphingSegmentedControl<T> extends StatefulWidget {
   final ValueChanged<T> onChanged;
 
   // --- Tab Configuration ---
-  /// The value associated with the non-expanding (first) tab.
   final T simpleTabValue;
-
-  /// The label displayed for the non-expanding (first) tab.
   final String simpleTabLabel;
-
-  /// The label displayed for the expanding (second) tab group when it's collapsed.
-  final String groupTabCollapsedLabel;
-
-  /// The list of options for the expanding (second) tab group.
-  final List<MorphingTabItem<T>> groupTabOptions;
+  final String groupTabCollapsedLabel; // "Premium"
+  final List<MorphingTabItem<T>>
+      groupTabOptions; // Items for nested bar & subtitle
 
   // --- Customization ---
-  /// Height of the control.
   final double height;
-
-  /// Overall width of the control. If null, it tries to expand.
   final double? width;
-
-  /// Padding inside the main container.
   final EdgeInsets padding;
-
-  /// Margin around the main sliding thumb.
   final EdgeInsets mainThumbMargin;
-
-  /// Margin around the nested sliding thumb.
   final EdgeInsets nestedThumbMargin;
-
-  /// Background color of the control.
   final Color backgroundColor;
-
-  /// Color of the main sliding thumb (selects between simpleTab and the groupTab).
-  final Color selectedColor;
-
-  /// Color of the nested sliding thumb (selects within the groupTab options).
-  final Color nestedSelectedColor;
-
-  /// Text color when the text is over the corresponding selected thumb.
-  final Color selectedTextColor;
-
-  /// Text color when the text is *not* over its corresponding selected thumb.
-  final Color unselectedTextColor;
-
-  /// Color of the nested selected text.
-  final Color nestedSelectedTextColor;
-
-  /// Color of the nested unselected text.
-  final Color nestedUnselectedTextColor;
-
-  /// General text style for labels. Specific colors ([selectedTextColor],
-  /// [unselectedTextColor]) will override the color in this style.
+  final Color selectedColor; // Main thumb color
+  final Color nestedSelectedColor; // Nested thumb color
+  final Color selectedTextColor; // Text over main thumb
+  final Color unselectedTextColor; // Text over main background
+  final Color nestedSelectedTextColor; // Text over nested thumb
+  final Color
+      nestedUnselectedTextColor; // Text over nested background (main thumb)
   final TextStyle? textStyle;
-
-  /// Duration for the main thumb sliding animation.
   final Duration mainAnimationDuration;
-
-  /// Duration for the nested thumb sliding animation.
   final Duration nestedAnimationDuration;
-
-  /// Duration for the fade animation when switching the group tab content.
-  final Duration switchAnimationDuration;
-
-  /// Animation curve used for all animations.
-  final Curve animationCurve;
+  final Duration switchAnimationDuration; // Duration for the morph switch
+  final Curve animationCurve; // General curve for slides
+  // Curves for the switch transition specifically
+  final Curve switchScaleInCurve;
+  final Curve switchScaleOutCurve;
+  final Curve switchFadeInCurve;
+  final Curve switchFadeOutCurve;
+  final Curve switchSlideOutCurve;
 
   const MorphingSegmentedControl({
     super.key,
@@ -188,72 +160,165 @@ class MorphingSegmentedControl<T> extends StatefulWidget {
     this.mainThumbMargin = const EdgeInsets.all(2),
     this.nestedThumbMargin = const EdgeInsets.all(4),
     this.backgroundColor = Colors.black,
-    this.selectedColor = Colors.white, // Main thumb color
-    this.nestedSelectedColor = Colors.black, // Nested thumb color
-    this.selectedTextColor = Colors.black, // Text color over main thumb
-    this.unselectedTextColor = Colors.white, // Text color over main background
-    this.nestedSelectedTextColor = Colors.white, // Nested thumb text color
-    this.nestedUnselectedTextColor = Colors.black, // Nested thumb text color
+    this.selectedColor = Colors.white,
+    this.nestedSelectedColor = Colors.black,
+    this.selectedTextColor = Colors.black,
+    this.unselectedTextColor = Colors.white,
+    this.nestedSelectedTextColor = Colors.white,
+    this.nestedUnselectedTextColor = Colors.black,
     this.textStyle,
     this.mainAnimationDuration = const Duration(milliseconds: 250),
     this.nestedAnimationDuration = const Duration(milliseconds: 250),
-    this.switchAnimationDuration = const Duration(milliseconds: 200),
+    this.switchAnimationDuration =
+        const Duration(milliseconds: 400), // Using 400ms
     this.animationCurve = Curves.easeInOut,
-  }) : assert(groupTabOptions.length > 0, 'groupTabOptions cannot be empty');
+    this.switchScaleInCurve = Curves.easeOutCubic,
+    this.switchScaleOutCurve = Curves.easeInCubic,
+    this.switchFadeInCurve = Curves.easeIn,
+    this.switchFadeOutCurve = Curves.easeOut,
+    this.switchSlideOutCurve = Curves.easeOut, // Curve for the slide-out part
+  }) : assert(groupTabOptions.length >= 2,
+            'groupTabOptions must have at least two items for the default subtitle display');
 
   @override
   State<MorphingSegmentedControl<T>> createState() =>
       _MorphingSegmentedControlState<T>();
 }
 
+// --- State Class ---
+// Add TickerProviderStateMixin
 class _MorphingSegmentedControlState<T>
-    extends State<MorphingSegmentedControl<T>> {
-  // Helper to check if the current value belongs to the group/nested options
-  bool get _isGroupTabSelected {
-    return widget.groupTabOptions.any((option) => option.value == widget.value);
+    extends State<MorphingSegmentedControl<T>> with TickerProviderStateMixin {
+  late AnimationController _switchController;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  // Track previous state to trigger animation correctly
+  bool _wasGroupTabSelected = false;
+
+  // Helper getter
+  bool get _isCurrentlyGroupTabSelected =>
+      widget.groupTabOptions.any((option) => option.value == widget.value);
+
+  @override
+  void initState() {
+    super.initState();
+    _wasGroupTabSelected = _isCurrentlyGroupTabSelected;
+
+    _switchController = AnimationController(
+      vsync: this,
+      duration: widget.switchAnimationDuration,
+      // Set initial value based on initial selection
+      value: _wasGroupTabSelected ? 1.0 : 0.0,
+    );
+
+    _setupAnimations();
   }
 
-  // Calculate metrics for the main background thumb (Simple vs Group)
-  Map<String, double> _calculateMainThumbMetrics(double maxWidth) {
-    double availableWidth = maxWidth - widget.padding.horizontal;
-    double thumbWidth = availableWidth / 2; // Always 50% for main selection
-    double thumbLeft = widget.padding.left; // Default to Simple tab position
+  // Helper to set up tween animations based on controller
+  void _setupAnimations() {
+    // Fade: 0->1 for expanding (nested comes in), 1->0 for collapsing (collapsed comes in)
+    // Opacity logic driven inside builder based on controller value directly for simplicity
+    // This simplifies reversing, but we can use Tweens if preferred.
 
-    if (_isGroupTabSelected) {
-      // If any group option is selected, move thumb to the right half
-      thumbLeft = widget.padding.left + (availableWidth / 2);
+    // Scale: 0.8->1.0 for expanding (nested scales in), 1.0->0.8 for collapsing (nested scales out)
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+        CurvedAnimation(
+            parent: _switchController, curve: Curves.easeInOut) // Example curve
+        );
+
+    // Slide: Only for collapsed view when it's moving OUT (controller 0 -> 1)
+    _slideAnimation = Tween<Offset>(
+            begin: Offset.zero, end: const Offset(0.0, -0.5)) // Slide up more
+        .animate(CurvedAnimation(
+            parent: _switchController, curve: widget.switchSlideOutCurve));
+  }
+
+  @override
+  void didUpdateWidget(MorphingSegmentedControl<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final bool isNowGroupSelected = _isCurrentlyGroupTabSelected;
+
+    // If the group selection state CHANGES, trigger animation
+    if (_wasGroupTabSelected != isNowGroupSelected) {
+      if (isNowGroupSelected) {
+        // Expanding: Animate 0.0 -> 1.0
+        _switchController.forward();
+      } else {
+        // Collapsing: Animate 1.0 -> 0.0
+        _switchController.reverse();
+      }
+      _wasGroupTabSelected = isNowGroupSelected;
     }
 
+    // If durations change, update controller
+    if (widget.switchAnimationDuration != oldWidget.switchAnimationDuration) {
+      _switchController.duration = widget.switchAnimationDuration;
+    }
+    // Note: If curves change, re-setup animations if using CurvedAnimation wrappers outside builder
+  }
+
+  @override
+  void dispose() {
+    _switchController.dispose();
+    super.dispose();
+  }
+
+  Map<String, double> _calculateMainThumbMetrics(double maxWidth) {
+    if (maxWidth <= 0) return {'left': 0.0, 'width': 0.0};
+    double availableWidth = math.max(0, maxWidth - widget.padding.horizontal);
+    double thumbWidth = availableWidth / 2;
+    double thumbLeft = widget.padding.left;
+    // Use the CURRENT selection state for thumb position
+    if (_isCurrentlyGroupTabSelected) {
+      thumbLeft = widget.padding.left + (availableWidth / 2);
+    }
     return {'left': thumbLeft, 'width': thumbWidth};
   }
 
-  // --- Build Method ---
   @override
   Widget build(BuildContext context) {
-    // Calculate border radius based on height, padding, and margin
-    final double mainThumbEffectiveHeight = widget.height -
-        widget.padding.vertical -
-        widget.mainThumbMargin.vertical;
+    final double mainThumbEffectiveHeight = math.max(
+        0,
+        widget.height -
+            widget.padding.vertical -
+            widget.mainThumbMargin.vertical);
     final double mainThumbBorderRadius = mainThumbEffectiveHeight / 2;
-
     final TextStyle defaultTextStyle = widget.textStyle ??
         Theme.of(context).textTheme.bodyMedium ??
         const TextStyle();
     final TextStyle effectiveTextStyle =
         defaultTextStyle.copyWith(fontWeight: FontWeight.bold);
 
+    // Colors
+    final Color simpleTextColor = widget.value == widget.simpleTabValue
+        ? widget.selectedTextColor
+        : widget.unselectedTextColor;
+    // Collapsed view text should ALWAYS contrast with the main background
+    final Color groupCollapsedTextColor = widget.unselectedTextColor;
+
+    // Subtitle Text Generation
+    final String subtitleText1 = widget.groupTabOptions.isNotEmpty
+        ? widget.groupTabOptions[0].label
+        : '';
+    final String subtitleText2 = widget.groupTabOptions.length > 1
+        ? widget.groupTabOptions[1].label
+        : '';
+
     return Container(
       height: widget.height,
       width: widget.width,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: widget.backgroundColor,
         borderRadius: BorderRadius.circular(widget.height / 2),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final double maxWidth = constraints.maxWidth; // Use actual width
-          if (maxWidth == 0 || maxWidth.isInfinite) {
-            // Avoid calculations if width is not constrained
+          final double maxWidth = constraints.maxWidth;
+          if (maxWidth <= 0 || maxWidth.isInfinite) {
             return const SizedBox.shrink();
           }
 
@@ -261,21 +326,14 @@ class _MorphingSegmentedControlState<T>
           final double mainThumbLeft = mainThumbMetrics['left']!;
           final double mainThumbWidth = mainThumbMetrics['width']!;
 
-          // Determine text colors based on main thumb position
-          final Color simpleTextColor = widget.value == widget.simpleTabValue
-              ? widget.selectedTextColor // Over white thumb
-              : widget.unselectedTextColor; // Over black background
-
-          final Color groupCollapsedTextColor = _isGroupTabSelected
-              ? widget.selectedTextColor // Over white thumb
-              : widget.unselectedTextColor; // Over black background
-
           return Stack(
             alignment: Alignment.centerLeft,
             children: [
-              // --- 1. Main Sliding Thumb (Background Selector) ---
+              // --- Main Thumb ---
+              // Use an AnimatedPositioned controlled by the main selection, NOT the switch controller
               AnimatedPositioned(
                 duration: widget.mainAnimationDuration,
+                // Use main duration
                 curve: widget.animationCurve,
                 left: mainThumbLeft,
                 top: widget.padding.top,
@@ -284,19 +342,19 @@ class _MorphingSegmentedControlState<T>
                 child: Container(
                   margin: widget.mainThumbMargin,
                   decoration: BoxDecoration(
-                    color: widget.selectedColor, // Use parameter
+                    color: widget.selectedColor,
                     borderRadius: BorderRadius.circular(
                         mainThumbBorderRadius > 0 ? mainThumbBorderRadius : 0),
                   ),
                 ),
               ),
 
-              // --- 2. Tab Labels / Content Area ---
+              // --- Labels ---
               Padding(
-                padding: widget.padding, // Apply overall padding
+                padding: widget.padding,
                 child: Row(
                   children: [
-                    // --- SIMPLE Tab Area (50%) ---
+                    // --- Simple Tab ---
                     Expanded(
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
@@ -307,114 +365,235 @@ class _MorphingSegmentedControlState<T>
                             widget.simpleTabLabel,
                             style: effectiveTextStyle.copyWith(
                                 color: simpleTextColor),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
                     ),
 
-                    // --- GROUP Tab Area (50%) ---
+                    // --- Group Tab (Using AnimatedBuilder) ---
                     Expanded(
-                      child: AnimatedSwitcher(
-                        duration: widget.switchAnimationDuration,
-                        switchInCurve: widget.animationCurve,
-                        switchOutCurve: widget.animationCurve,
-                        transitionBuilder: (child, anim) {
-                          return FadeTransition(opacity: anim, child: child);
-                        },
-                        child: _isGroupTabSelected
-                            ? _NestedTabBar<T>(
-                                // Use a key for state preservation if needed, ValueKey helps switcher
-                                key: ValueKey(widget.groupTabOptions),
-                                selectedTabValue: widget.value,
-                                options: widget.groupTabOptions,
-                                onChanged: widget.onChanged,
-                                // Pass necessary dimensions & styles
-                                parentHeight:
-                                    widget.height - widget.padding.vertical,
-                                nestedThumbMargin: widget.nestedThumbMargin,
-                                animationDuration:
-                                    widget.nestedAnimationDuration,
-                                animationCurve: widget.animationCurve,
-                                selectedColor: widget.nestedSelectedColor,
-                                // Text colors are reversed for nested bar
-                                selectedTextColor:
-                                    widget.nestedSelectedTextColor,
-                                // Text over nested thumb
-                                unselectedTextColor:
-                                    widget.nestedUnselectedTextColor,
-                                // Text over main thumb background
-                                textStyle: effectiveTextStyle,
-                              )
-                            : GestureDetector(
-                                // Key for the collapsed state
-                                key: ValueKey(widget.groupTabCollapsedLabel),
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  // Default to first group option when tapping collapsed label
-                                  if (widget.groupTabOptions.isNotEmpty) {
-                                    widget.onChanged(
-                                        widget.groupTabOptions.first.value);
-                                  }
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        key: Key('label_2'),
-                                        widget.groupTabCollapsedLabel,
-                                        style: effectiveTextStyle.copyWith(
-                                          color: groupCollapsedTextColor,
-                                          height: 1.0,
+                      child: AnimatedBuilder(
+                        animation: _switchController,
+                        builder: (context, _) {
+                          // Calculate animation values based on controller
+                          // Use curves directly here for more control per property
+                          final double controllerValue = _switchController
+                              .value; // 0.0 = collapsed, 1.0 = expanded
+
+                          // --- Collapsed View Animations ---
+                          // Fade out as controller goes 0 -> 1
+                          final double collapsedOpacity = 1.0 -
+                              CurvedAnimation(
+                                      parent: _switchController,
+                                      curve: widget.switchFadeOutCurve)
+                                  .value;
+                          // Scale down as controller goes 0 -> 1
+                          final double collapsedScale = 1.0 -
+                              (CurvedAnimation(
+                                          parent: _switchController,
+                                          curve: widget.switchScaleOutCurve)
+                                      .value *
+                                  0.2); // Scale 1.0 -> 0.8
+                          // Slide up as controller goes 0 -> 1
+                          final Offset collapsedSlide = Tween<Offset>(
+                                  begin: Offset.zero,
+                                  end: const Offset(0.0, -0.5))
+                              .transform(CurvedAnimation(
+                                      parent: _switchController,
+                                      curve: widget.switchSlideOutCurve)
+                                  .value);
+
+                          // --- Expanded View Animations ---
+                          // Fade in as controller goes 0 -> 1
+                          final double expandedOpacity = CurvedAnimation(
+                                  parent: _switchController,
+                                  curve: widget.switchFadeInCurve)
+                              .value;
+                          // Scale up as controller goes 0 -> 1
+                          final double expandedScale = 0.8 +
+                              (CurvedAnimation(
+                                          parent: _switchController,
+                                          curve: widget.switchScaleInCurve)
+                                      .value *
+                                  0.2); // Scale 0.8 -> 1.0
+
+                          // Use IgnorePointer to disable taps on views that are mostly faded out
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // --- Collapsed View (Premium + Subtitle) ---
+                              if (controllerValue <
+                                  1.0) // Optimization: Don't build if fully expanded
+                                IgnorePointer(
+                                  ignoring: controllerValue >
+                                      0.8, // Disable taps when mostly faded
+                                  child: Opacity(
+                                    opacity: collapsedOpacity,
+                                    child: Transform.translate(
+                                      offset: collapsedSlide,
+                                      child: Transform.scale(
+                                        scale: collapsedScale,
+                                        child: GestureDetector(
+                                          // Keep GestureDetector for tap target
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            // Check if currently collapsed before triggering change
+                                            if (!_isCurrentlyGroupTabSelected &&
+                                                widget.groupTabOptions
+                                                    .isNotEmpty) {
+                                              widget.onChanged(widget
+                                                  .groupTabOptions.first.value);
+                                            }
+                                          },
+                                          child: Container(
+                                            // Background needed? Probably not if main thumb handles it
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  // Main Label
+                                                  widget.groupTabCollapsedLabel,
+                                                  style: effectiveTextStyle
+                                                      .copyWith(
+                                                          color:
+                                                              groupCollapsedTextColor,
+                                                          height: 1.1),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                const SizedBox(height: 1),
+                                                Row(
+                                                  // Subtitle
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Flexible(
+                                                        child: Text(
+                                                            subtitleText1,
+                                                            style: effectiveTextStyle
+                                                                .copyWith(
+                                                                    color: groupCollapsedTextColor
+                                                                        .withValues(
+                                                                      alpha:
+                                                                          0.6,
+                                                                    ),
+                                                                    height: 1.0,
+                                                                    fontSize: math.max(
+                                                                        10.0,
+                                                                        (effectiveTextStyle.fontSize ??
+                                                                                14.0) *
+                                                                            0.7),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis)),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 2.0),
+                                                      child: Text(
+                                                        ' - ',
+                                                        style: effectiveTextStyle
+                                                            .copyWith(
+                                                                color: groupCollapsedTextColor
+                                                                    .withValues(
+                                                                  alpha: 0.6,
+                                                                ),
+                                                                height: 1.0,
+                                                                fontSize: math.max(
+                                                                    10.0,
+                                                                    (effectiveTextStyle.fontSize ??
+                                                                            14.0) *
+                                                                        0.7),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                      child: Text(subtitleText2,
+                                                          style: effectiveTextStyle
+                                                              .copyWith(
+                                                                  color: groupCollapsedTextColor
+                                                                      .withValues(
+                                                                    alpha: 0.6,
+                                                                  ),
+                                                                  height: 1.0,
+                                                                  fontSize: math.max(
+                                                                      10.0,
+                                                                      (effectiveTextStyle.fontSize ??
+                                                                              14.0) *
+                                                                          0.7),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      const SizedBox(height: 2),
-                                      Row(
-                                        key: Key('label_2_subtitle_row'),
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            key: const Key(
-                                                'label_2_subtitle_text_0'),
-                                            widget.groupTabOptions.first.label,
-                                            style: effectiveTextStyle.copyWith(
-                                              color: groupCollapsedTextColor
-                                                  .withValues(
-                                                alpha: 0.5,
-                                              ),
-                                              height: 1.0,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          const Text(
-                                            key: Key(
-                                                'label_2_subtitle_text_1_separator'),
-                                            ' , ',
-                                          ),
-                                          Text(
-                                            key: const Key(
-                                                'label_2_subtitle_text_1'),
-                                            widget.groupTabOptions.last.label,
-                                            style: effectiveTextStyle.copyWith(
-                                              color: groupCollapsedTextColor
-                                                  .withValues(
-                                                alpha: 0.5,
-                                              ),
-                                              height: 1.0,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+
+                              // --- Expanded View (_NestedTabBar) ---
+                              if (controllerValue >
+                                  0.0) // Optimization: Don't build if fully collapsed
+                                IgnorePointer(
+                                  ignoring: controllerValue <
+                                      0.2, // Disable taps when mostly faded out
+                                  child: Opacity(
+                                    opacity: expandedOpacity,
+                                    child: Transform.scale(
+                                      scale: expandedScale,
+                                      alignment: const Alignment(
+                                          0.0, 0.3), // Align lower
+                                      child: _NestedTabBar<T>(
+                                        // key is not strictly needed here as it's always the same instance type
+                                        selectedTabValue: widget.value,
+                                        options: widget.groupTabOptions,
+                                        onChanged: widget.onChanged,
+                                        parentHeight: widget.height -
+                                            widget.padding.vertical,
+                                        nestedThumbMargin:
+                                            widget.nestedThumbMargin,
+                                        animationDuration:
+                                            widget.nestedAnimationDuration,
+                                        animationCurve: widget.animationCurve,
+                                        selectedColor:
+                                            widget.nestedSelectedColor,
+                                        selectedTextColor:
+                                            widget.nestedSelectedTextColor,
+                                        unselectedTextColor:
+                                            widget.nestedUnselectedTextColor,
+                                        textStyle: effectiveTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -428,8 +607,8 @@ class _MorphingSegmentedControlState<T>
   }
 }
 
-// --- Internal Nested Tab Bar Widget ---
-// Manages selection within the second (group) segment
+// --- _NestedTabBar Class ---
+// (Keep the _NestedTabBar class from the previous valid answer - no changes needed)
 class _NestedTabBar<T> extends StatelessWidget {
   final T selectedTabValue;
   final List<MorphingTabItem<T>> options;
@@ -462,16 +641,20 @@ class _NestedTabBar<T> extends StatelessWidget {
 
   // Calculate metrics for the *internal* thumb
   Map<String, double> _calculateInternalThumbMetrics(double maxWidth) {
-    if (options.isEmpty) {
+    // Avoid division by zero or negative width
+    if (options.isEmpty || maxWidth <= 0) {
       return {'left': 0.0, 'width': 0.0};
     }
     int selectedIndex = options.indexWhere((o) => o.value == selectedTabValue);
-    if (selectedIndex < 0)
-      selectedIndex = 0; // Should not happen if value is valid
+    if (selectedIndex < 0) selectedIndex = 0;
 
     double totalOptions = options.length.toDouble();
     double thumbWidth = maxWidth / totalOptions;
     double thumbLeft = thumbWidth * selectedIndex;
+
+    // Ensure thumb doesn't exceed bounds due to precision issues
+    thumbLeft = math.max(0, thumbLeft);
+    thumbWidth = math.min(thumbWidth, maxWidth - thumbLeft);
 
     return {'left': thumbLeft, 'width': thumbWidth};
   }
@@ -480,13 +663,12 @@ class _NestedTabBar<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     // Calculate radius for the internal thumb
     final double thumbEffectiveHeight =
-        parentHeight - nestedThumbMargin.vertical;
+        math.max(0, parentHeight - nestedThumbMargin.vertical);
     final double thumbBorderRadius = thumbEffectiveHeight / 2;
 
     return LayoutBuilder(builder: (context, constraints) {
       final double maxWidth = constraints.maxWidth;
-      if (maxWidth == 0 || maxWidth.isInfinite || options.isEmpty) {
-        // Avoid calculations if width is not constrained or no options
+      if (maxWidth <= 0 || maxWidth.isInfinite || options.isEmpty) {
         return const SizedBox.shrink();
       }
 
@@ -498,22 +680,24 @@ class _NestedTabBar<T> extends StatelessWidget {
         alignment: Alignment.centerLeft,
         children: [
           // --- 1. Internal Sliding Thumb ---
-          AnimatedPositioned(
-            duration: animationDuration,
-            curve: animationCurve,
-            left: thumbLeft,
-            top: 0,
-            bottom: 0,
-            width: thumbWidth,
-            child: Container(
-              margin: nestedThumbMargin,
-              decoration: BoxDecoration(
-                color: selectedColor, // Use parameter
-                borderRadius: BorderRadius.circular(
-                    thumbBorderRadius > 0 ? thumbBorderRadius : 0),
+          // Ensure thumb width/position are valid before building
+          if (thumbWidth > 0)
+            AnimatedPositioned(
+              duration: animationDuration,
+              curve: animationCurve,
+              left: thumbLeft,
+              top: 0,
+              bottom: 0,
+              width: thumbWidth,
+              child: Container(
+                margin: nestedThumbMargin,
+                decoration: BoxDecoration(
+                  color: selectedColor, // Use parameter
+                  borderRadius: BorderRadius.circular(
+                      thumbBorderRadius > 0 ? thumbBorderRadius : 0),
+                ),
               ),
             ),
-          ),
 
           // --- 2. Nested Option Labels ---
           Row(
@@ -534,6 +718,8 @@ class _NestedTabBar<T> extends StatelessWidget {
                       style: textStyle?.copyWith(color: textColor) ??
                           TextStyle(
                               color: textColor, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
