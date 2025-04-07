@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:animation_playground/buildcontext_extension.dart';
 import 'package:flutter/material.dart';
 
-// Define your values (could be enums, strings, ints...)
 enum PlanType { free, premiumMonthly, premiumYearly }
 
 class MorphingSegmentedControlPage extends StatefulWidget {
@@ -72,7 +71,6 @@ class _MorphingSegmentedControlPageState
                   unselectedTextColor: Colors.grey,
                   nestedSelectedTextColor: Colors.black,
                   nestedUnselectedTextColor: Colors.white,
-                  // textStyle: TextStyle(fontSize: 14),
                 ),
               ),
             ),
@@ -83,8 +81,6 @@ class _MorphingSegmentedControlPageState
   }
 }
 
-// --- MorphingTabItem Class ---
-// (Ensure this class definition is included)
 class MorphingTabItem<T> {
   final T value;
   final String label;
@@ -258,7 +254,6 @@ class _MorphingSegmentedControlState<T>
         builder: (context, _) {
           final double controllerValue = _switchController.value;
 
-          // Animation values calculation
           final double collapsedOpacity = (1.0 -
                   CurvedAnimation(
                           parent: _switchController,
