@@ -98,8 +98,6 @@ class MorphingTabItem<T> {
   int get hashCode => value.hashCode;
 }
 
-/// A segmented control with a morphing behavior for the second segment,
-/// allowing it to expand into sub-options.
 class MorphingSegmentedControl<T> extends StatefulWidget {
   final T value;
   final ValueChanged<T> onChanged;
@@ -256,9 +254,9 @@ class _MorphingSegmentedControlState<T>
 
           final double collapsedOpacity = (1.0 -
                   CurvedAnimation(
-                          parent: _switchController,
-                          curve: widget.switchFadeOutCurve)
-                      .value)
+                    parent: _switchController,
+                    curve: widget.switchFadeOutCurve,
+                  ).value)
               .clamp(0.0, 1.0);
           final double collapsedScale = 1.0 -
               (CurvedAnimation(
@@ -576,7 +574,8 @@ class _NestedTabBar<T> extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: selectedColor,
                   borderRadius: BorderRadius.circular(
-                      thumbBorderRadius > 0 ? thumbBorderRadius : 0),
+                    thumbBorderRadius > 0 ? thumbBorderRadius : 0,
+                  ),
                 ),
               ),
             ),
@@ -597,7 +596,9 @@ class _NestedTabBar<T> extends StatelessWidget {
                       item.label,
                       style: textStyle?.copyWith(color: textColor) ??
                           TextStyle(
-                              color: textColor, fontWeight: FontWeight.bold),
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
