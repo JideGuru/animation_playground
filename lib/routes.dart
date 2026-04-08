@@ -3,6 +3,7 @@ import 'package:animation_playground/list_page.dart';
 import 'package:animation_playground/shaders/barrel.dart';
 import 'package:flutter/material.dart';
 
+import 'animations/book_flip/book_flip.dart';
 import 'animations/card/barrel.dart';
 import 'animations/coding_train_challenges/barrel.dart';
 import 'animations/grid_magnification/barrel.dart';
@@ -27,4 +28,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/segmented-bar-flip-animation': (context) => const SegmentedBarFlip(),
   '/morphing-segmented-control': (context) =>
       const MorphingSegmentedControlPage(),
+  '/page-flip': (context) => const PageFlipPage(),
 };

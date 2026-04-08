@@ -102,7 +102,7 @@ class Particle {
     required this.y,
   });
 
-  update() {
+  void update() {
     x += vx;
     y += vy;
     alpha -= 5;
@@ -127,7 +127,7 @@ class Emitter {
           ),
         );
 
-  update() {
+  void update() {
     particles.add(Particle(x: position.dx, y: position.dy));
     for (var particle in particles) {
       if (particle.finished()) particlesToRemove.add(particle);

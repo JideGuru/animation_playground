@@ -65,7 +65,7 @@ class _RainDropState extends State<_RainDrop> with SingleTickerProviderStateMixi
     _ticker.start();
   }
 
-  randomizeValues() {
+  void randomizeValues() {
     dx = random.nextDouble() * screenWidth;
     dy = -500 - (random.nextDouble() * -500);
     z = random.nextDouble() * 20;

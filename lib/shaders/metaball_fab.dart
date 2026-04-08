@@ -16,40 +16,23 @@ class _MetaballFABState extends State<MetaballFAB>
   late Offset firstButtonPos;
   late Offset secondButtonPos;
   late final AnimationController _firstController;
-  late final Animation<Offset> _firstAnimation;
+  late Animation<Offset> _firstAnimation;
   late final AnimationController _secondController;
-  late final Animation<Offset> _secondAnimation;
+  late Animation<Offset> _secondAnimation;
   bool expanded = false;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    var screenWidth =
-        (ui.window.physicalSize.shortestSide / ui.window.devicePixelRatio);
-    var screenHeight =
-        (ui.window.physicalSize.longestSide / ui.window.devicePixelRatio);
-    mainButtonPos = Offset(screenWidth / 2, screenHeight - 100);
-    firstButtonPos = Offset(screenWidth / 2, screenHeight - 100);
-    secondButtonPos = Offset(screenWidth / 2, screenHeight - 100);
     _firstController = AnimationController(
-      // value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _firstAnimation = Tween<Offset>(
-      begin: firstButtonPos,
-      end: Offset(firstButtonPos.dx, firstButtonPos.dy - 250),
-    ).animate(_firstController);
-
     _secondController = AnimationController(
-      // value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _secondAnimation = Tween<Offset>(
-      begin: secondButtonPos,
-      end: Offset(secondButtonPos.dx, secondButtonPos.dy - 140),
-    ).animate(_secondController);
 
     _firstController.addListener(() {
       setState(() {});
@@ -60,7 +43,40 @@ class _MetaballFABState extends State<MetaballFAB>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      final size = MediaQuery.of(context).size;
+      final screenWidth = size.width;
+      final screenHeight = size.height;
+      mainButtonPos = Offset(screenWidth / 2, screenHeight - 100);
+      firstButtonPos = Offset(screenWidth / 2, screenHeight - 100);
+      secondButtonPos = Offset(screenWidth / 2, screenHeight - 100);
+
+      _firstAnimation = Tween<Offset>(
+        begin: firstButtonPos,
+        end: Offset(firstButtonPos.dx, firstButtonPos.dy - 250),
+      ).animate(_firstController);
+
+      _secondAnimation = Tween<Offset>(
+        begin: secondButtonPos,
+        end: Offset(secondButtonPos.dx, secondButtonPos.dy - 140),
+      ).animate(_secondController);
+
+      _initialized = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    _firstController.dispose();
+    _secondController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!_initialized) return const SizedBox.shrink();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Metaball FAB'),
@@ -80,7 +96,7 @@ class _MetaballFABState extends State<MetaballFAB>
               ),
             ),
             Positioned(
-              top: mainButtonPos.dy -100,
+              top: mainButtonPos.dy - 100,
               left: mainButtonPos.dx - 90,
               child: GestureDetector(
                 onTap: () {
@@ -125,15 +141,6 @@ class _MetaballFABState extends State<MetaballFAB>
                   ..color = Colors.white
                   ..shader = shader,
               );
-
-              // canvas.drawPaint(
-              //   Paint()
-              //     ..shader = shader
-              //     ..color = Colors.black,
-              // );
-              // canvas.drawCircle(dragOffset - Offset(0, 50), 20, Paint()..color = Colors.white);
-              // canvas.drawCircle(
-              //     size.center(Offset.zero), 20, Paint()..color = Colors.white);
             },
           );
         },

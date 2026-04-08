@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List animationList = [
+List<AnimationPage> animationList = [
   AnimationPage(
     title: 'Fading Grid',
     route: '/fading-grid',
@@ -70,6 +70,11 @@ List animationList = [
     title: 'MorphingSegmentedControl',
     route: '/morphing-segmented-control',
     icon: Icons.animation,
+  ),
+  AnimationPage(
+    title: 'Page Flip Animation',
+    route: '/page-flip',
+    icon: Icons.book,
   ),
 ];
 

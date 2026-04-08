@@ -16,7 +16,7 @@ class _BouncingDVDState extends State<BouncingDVD> {
   double dvdWidth = 150, dvdHeight = 80;
   double x = 90, y = 30, xSpeed = 50, ySpeed = 50, speed = 150;
 
-  pickColor() {
+  void pickColor() {
     // removing the timer will make the dvd color change before bouncing
     // off the edge
     Timer(const Duration(milliseconds: 100), () {
@@ -33,7 +33,7 @@ class _BouncingDVDState extends State<BouncingDVD> {
     update();
   }
 
-  update() {
+  void update() {
     Timer.periodic(Duration(milliseconds: speed.toInt()), (timer) {
       double screenWidth = MediaQuery.of(context).size.width;
       double screenHeight = MediaQuery.of(context).size.height;

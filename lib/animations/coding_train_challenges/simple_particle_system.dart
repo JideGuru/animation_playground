@@ -91,14 +91,14 @@ class Particle {
 
   Particle();
 
-  setPosition(double xPos, double yPos) {
+  void setPosition(double xPos, double yPos) {
     if (x < 1 && y < 1) {
       x = xPos;
       y = yPos;
     }
   }
 
-  update() {
+  void update() {
     x += vx;
     y += vy;
     if (opacity > 0) {

@@ -1,6 +1,6 @@
 import 'dart:math' as math;
-import 'dart:math';
 
+import 'package:animation_playground/random_extension.dart';
 import 'package:flutter/material.dart';
 
 List<Color> colors = [
@@ -36,7 +36,5 @@ double rangeMap(
   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
-Random _random = Random();
-
 double doubleInRange(num start, num end) =>
-    _random.nextDouble() * (end - start) + start;
+    random.nextDouble() * (end - start) + start;

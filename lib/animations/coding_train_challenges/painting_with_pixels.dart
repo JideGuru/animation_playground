@@ -48,7 +48,7 @@ class _PaintingWithPixelsState extends State<PaintingWithPixels>
     setState(() {});
   }
 
-  randomizePoints() {
+  void randomizePoints() {
     int x = _random.nextInt(imagePixels.width);
     int y = _random.nextInt(imagePixels.height);
 
